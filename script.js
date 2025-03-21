@@ -266,7 +266,7 @@ label.addEventListener("click", (event) => {
         // Find the latest bot message and clear it
         const lastBotMessage = document.querySelector(".bot-message .message-text");
         if (lastBotMessage) {
-            lastBotMessage.textContent = "Typing stopped...";
+            lastBotMessage.textContent = "";
         }
     });
 
