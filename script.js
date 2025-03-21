@@ -9,6 +9,7 @@ const fileInput = document.getElementById("file-input");
 const fileUpload = document.querySelector(".file-upload-wrapper"); 
 const filePreview = fileUpload.querySelector(".file-preview");
 const label = document.getElementById("label");
+let controller = null;
 
 
 const API_KEY = "AIzaSyCxXmccv0KKx6I4w6-Yg9MYRj-FDEX55hs"; 
@@ -18,6 +19,7 @@ let userMsg = "";
 const chatHistory = [];
 let base64Image = "";
 let imageMimeType = "image/png"; 
+
 
 const createMsgElement = (content, ...classes) => {
     const div = document.createElement("div");
@@ -31,8 +33,14 @@ const createMsgElement = (content, ...classes) => {
 const typeTextEffect = (element, text, speed = 50) => {
     let i = 0;
     element.textContent = "";
+    window.stopTyping = false;
 
     function type() {
+        if (window.stopTyping) {
+            element.textContent = "Typing stopped..."; // Indicate stopped typing
+            return;
+        }
+
         if (i < text.length) {
             element.textContent += text.charAt(i);
             i++;
@@ -45,8 +53,8 @@ const typeTextEffect = (element, text, speed = 50) => {
 const generateResponse = async (botMsgDiv) => {
     const textElement = botMsgDiv.querySelector(".message-text");
 
-    let userParts = [{ text: userMsg +"responsed in only plain text "}];
-
+    let userParts = [{ text: "responsed in only plain text \n\n" +userMsg }];
+    controller = new AbortController();
     console.log("Base64 before request:", base64Image);
     console.log("Image MIME Type:", imageMimeType);
 
@@ -77,7 +85,8 @@ const generateResponse = async (botMsgDiv) => {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestBody)
+            body: JSON.stringify(requestBody),
+            signal: controller.signal
         });
 
         const data = await response.json();
@@ -245,4 +254,32 @@ label.addEventListener("click", (event) => {
             themeIcon.textContent = "light_mode"; // Change to sun icon
         }
     });
+    
+    document.getElementById("stop-btn").addEventListener("click", () => {
+        if (controller) {
+            controller.abort(); // Stop the fetch request
+            console.log("Fetch aborted!");
+        }
+        
+        window.stopTyping = true; // Stop the typing effect
+
+        // Find the latest bot message and clear it
+        const lastBotMessage = document.querySelector(".bot-message .message-text");
+        if (lastBotMessage) {
+            lastBotMessage.textContent = "Typing stopped...";
+        }
+    });
+
+    document.getElementById("delete-chats-btn").addEventListener("click", () => {
+        chatsContainer.innerHTML = ""; // Remove all messages
+        base64Image = ""; // Reset image data
+        imageMimeType = ""; // Reset MIME type
+        promptInput.value = ""; // Clear input field
+        fileInput.value = ""; // Reset file input
+        filePreview.src = ""; // Clear file preview
+        filePreview.style.backgroundImage = "none"; // Reset background image
+        fileUpload.classList.remove("active", "img-attached", "file-attached");
+        console.log("Chat cleared!");
+    });
 });
+

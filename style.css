@@ -33,14 +33,19 @@ body.light-theme{
     --scrollbar-color:#697565;
 }
 
-body{
+html,body{
     color: var(--text-color);
 background: var(--primary-color);
+    height: 100%;
+    overflow-y: auto; /* Enables vertical scrolling */
 }
 
 .container{
-    padding: 32px 0 60px;
+    padding-left:  60px;
+    padding-right: 60px;
     position: relative;
+    padding-bottom: 500px;
+    margin-top: 5rem;
 }
 
 .appheader, .suggestions, .prompt-wrapper, .disclaimer{
@@ -251,6 +256,9 @@ background: var(--primary-color);
     display: none;
 }
 
+#stop-btn:hover{
+    color: red;
+}
 .prompt-input:has(input:valid) #send-prompt-btn {
     display: inline-block; /* Show the button */
   }
