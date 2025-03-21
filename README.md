@@ -49,7 +49,8 @@ A simple chatbot powered by Gemini AI, built using HTML, CSS, and JavaScript.
 Check out the deployed chatbot: [Gemini Chatbot](https://gemini-chatbot-by-harsh.netlify.app/)
 
 ## Screenshots
-![Chatbot UI](screenshot.png)
+<img src="https://github.com/HarshJajaniya/gemini-chatbot/blob/main/images/1.png?raw=true">
+<img src="https://github.com/HarshJajaniya/gemini-chatbot/blob/main/images/2.png?raw=true">
 
 ## Contributing
 1. Fork the repository.
